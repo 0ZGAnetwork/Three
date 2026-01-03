@@ -46,6 +46,7 @@
 
         // --- ŁADOWANIE MODELU GLB ---
         let mixer;
+        let gltfScene;
         const loader = new THREE.GLTFLoader();
         loader.load('Red_Ring.glb', function (gltf) {
             const gltfScene = gltf.scene;
