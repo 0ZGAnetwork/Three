@@ -13,42 +13,40 @@
             overflow: hidden;
         }
 
-        canvas {
-            display: block;
+        #container {
+            width: 600px;
+            height: 600px;
         }
     </style>
 </head>
 
 <body>
+    <div id="container"></div>
 
-    <script type="module">
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
-        import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+    <!-- Three.js starsza wersja, działa z globalnym GLTFLoader -->
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r147/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r147/examples/js/loaders/GLTFLoader.js"></script>
 
-        // --- SCENA, KAMERA, RENDERER ---
+    <script>
+        // SCENA
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
         camera.position.z = 5;
 
         const renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(600, 600);
-        document.body.appendChild(renderer.domElement);
+        document.getElementById('container').appendChild(renderer.domElement);
 
-        // --- ŚWIATŁO ---
+        // ŚWIATŁO
         scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const dirLight = new THREE.DirectionalLight(0xffffff, 1);
         dirLight.position.set(2, 2, 3);
         scene.add(dirLight);
 
-        // --- KONTROLKI ORBIT (opcjonalnie do testów) ---
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-
-        // --- ŁADOWANIE MODELU GLB ---
+        // ŁADOWANIE GLB
         let mixer;
-        const loader = new GLTFLoader();
-        loader.load('Red_Ring.glb', (gltf) => {
+        const loader = new THREE.GLTFLoader();
+        loader.load('Red_Ring.glb', function (gltf) {
             const gltfScene = gltf.scene;
             gltfScene.scale.set(1.5, 1.5, 1.5);
             scene.add(gltfScene);
@@ -59,24 +57,20 @@
             }
 
             // Obrót po kliknięciu
-            window.addEventListener('click', () => {
-                gltfScene.rotation.y += Math.PI;
-            });
-        }, undefined, (error) => {
-            console.error('Error GLB:', error);
+            window.addEventListener('click', () => { gltfScene.rotation.y += Math.PI; });
+        }, undefined, function (error) {
+            console.error('Błąd wczytywania GLB:', error);
         });
 
-        // --- ANIMACJA ---
+        // ANIMACJA
         const clock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
             if (mixer) mixer.update(clock.getDelta());
-            controls.update();
             renderer.render(scene, camera);
         }
         animate();
     </script>
-
 </body>
 
 </html>
