@@ -47,7 +47,7 @@
 
         // Model GLB
         let mixer;
-        const loader = new THREE.GLTFLoader();
+        const loader = new GLTFLoader();
         loader.load('Red_Ring.glb', function (gltf) {
             const gltfScene = gltf.scene;
             gltfScene.scale.set(1.5, 1.5, 1.5);
