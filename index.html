@@ -49,7 +49,7 @@
         let gltfScene;
         const loader = new THREE.GLTFLoader();
         loader.load('Red_Ring.glb', function (gltf) {
-            const gltfScene = gltf.scene;
+            gltfScene = gltf.scene;
             gltfScene.scale.set(1.5, 1.5, 1.5);
             scene.add(gltfScene);
 
